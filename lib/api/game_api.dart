@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/game.dart';
@@ -12,8 +11,8 @@ class GameApi {
   final options = Options(
     validateStatus: (status) => true,
     headers: {
-      'x-rapidapi-host': dotenv.env['HOST'] ?? '',
-      'x-rapidapi-key': dotenv.env['KEY'] ?? '',
+      'x-rapidapi-host': 'v3.football.api-sports.io',
+      'x-rapidapi-key': 'aad567230b15af533a80bf5aa13a14cb',
     },
   );
 
