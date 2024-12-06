@@ -373,7 +373,7 @@ class _Stat extends StatelessWidget {
     double total = (d1 + d2).clamp(1, double.infinity);
     double percentage1 = d1 / total;
     double percentage2 = d2 / total;
-    double maxWidth = 140;
+    double maxWidth = (MediaQuery.of(context).size.width - 72) / 2;
     double calculatedWidth1 = (percentage1 * maxWidth).clamp(0, maxWidth);
     double calculatedWidth2 = (percentage2 * maxWidth).clamp(0, maxWidth);
 
@@ -425,12 +425,11 @@ class _Stat extends StatelessWidget {
             children: [
               SizedBox(
                 height: 7,
-                width: 140,
                 child: Stack(
                   children: [
                     Container(
                       height: 7,
-                      width: 140,
+                      width: (MediaQuery.of(context).size.width - 72) / 2,
                       decoration: BoxDecoration(
                         color: const Color(0xff525252),
                         borderRadius: BorderRadius.circular(7),
@@ -450,12 +449,11 @@ class _Stat extends StatelessWidget {
               const SizedBox(width: 12),
               SizedBox(
                 height: 7,
-                width: 140,
                 child: Stack(
                   children: [
                     Container(
                       height: 7,
-                      width: 140,
+                      width: (MediaQuery.of(context).size.width - 72) / 2,
                       decoration: BoxDecoration(
                         color: const Color(0xff525252),
                         borderRadius: BorderRadius.circular(7),
