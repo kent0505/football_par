@@ -8,10 +8,15 @@ final class GameInitial extends GameState {}
 final class GamesLoading extends GameState {}
 
 final class GamesLoaded extends GameState {
-  GamesLoaded({required this.games, this.stats});
+  GamesLoaded({
+    required this.games,
+    required this.stats,
+    required this.goals,
+  });
 
   final List<Game> games;
-  final Stats? stats;
+  final Stats stats;
+  final List<Goal> goals;
 }
 
 final class DataLoaded extends GameState {
@@ -19,5 +24,3 @@ final class DataLoaded extends GameState {
 
   final bool onboard;
 }
-
-final class GamesError extends GameState {}

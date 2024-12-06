@@ -24,7 +24,6 @@ class GameDetailPage extends StatefulWidget {
 }
 
 class _GameDetailPageState extends State<GameDetailPage> {
-  late Game game;
   String currentTab = 'Stats';
 
   void onTab(String value) {
@@ -41,9 +40,6 @@ class _GameDetailPageState extends State<GameDetailPage> {
           id: widget.game.id,
           games: widget.games,
         ));
-    for (Game g in widget.games) {
-      if (g.id == widget.game.id) game = g;
-    }
   }
 
   @override
@@ -75,8 +71,8 @@ class _GameDetailPageState extends State<GameDetailPage> {
                         children: [
                           const SizedBox(width: 8),
                           _Team(
-                            logo: game.logo1,
-                            title: game.title1,
+                            logo: widget.game.logo1,
+                            title: widget.game.title1,
                             home: 'Home',
                           ),
                           Expanded(
@@ -85,7 +81,7 @@ class _GameDetailPageState extends State<GameDetailPage> {
                               children: [
                                 const Spacer(flex: 5),
                                 Text(
-                                  game.stadium,
+                                  widget.game.stadium,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.center,
@@ -98,7 +94,7 @@ class _GameDetailPageState extends State<GameDetailPage> {
                                 ),
                                 const Spacer(),
                                 Text(
-                                  formatTimestamp(game.date),
+                                  formatTimestamp(widget.game.date),
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                     color: Colors.black,
@@ -108,7 +104,7 @@ class _GameDetailPageState extends State<GameDetailPage> {
                                 ),
                                 const Spacer(),
                                 Text(
-                                  '${game.goals1}-${game.goals2}',
+                                  '${widget.game.goals1}-${widget.game.goals2}',
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                     color: Colors.black,
@@ -122,8 +118,8 @@ class _GameDetailPageState extends State<GameDetailPage> {
                             ),
                           ),
                           _Team(
-                            logo: game.logo2,
-                            title: game.title2,
+                            logo: widget.game.logo2,
+                            title: widget.game.title2,
                             home: 'Away',
                           ),
                           const SizedBox(width: 8),
@@ -161,56 +157,83 @@ class _GameDetailPageState extends State<GameDetailPage> {
                     if (currentTab == 'Stats') ...[
                       _Stat(
                         title: 'Shot',
-                        data1: state.stats!.team1.shots.toString(),
-                        data2: state.stats!.team2.shots.toString(),
+                        data1: state.stats.team1.shots.toString(),
+                        data2: state.stats.team2.shots.toString(),
                       ),
                       _Stat(
                         title: 'Shots on target',
-                        data1: state.stats!.team1.shotsOnGoal.toString(),
-                        data2: state.stats!.team2.shotsOnGoal.toString(),
+                        data1: state.stats.team1.shotsOnGoal.toString(),
+                        data2: state.stats.team2.shotsOnGoal.toString(),
                       ),
                       _Stat(
                         title: 'Possession',
-                        data1: state.stats!.team1.possession.toString(),
-                        data2: state.stats!.team2.possession.toString(),
+                        data1: state.stats.team1.possession.toString(),
+                        data2: state.stats.team2.possession.toString(),
                       ),
                       _Stat(
                         title: 'Passes',
-                        data1: state.stats!.team1.passes.toString(),
-                        data2: state.stats!.team2.passes.toString(),
+                        data1: state.stats.team1.passes.toString(),
+                        data2: state.stats.team2.passes.toString(),
                       ),
                       _Stat(
                         title: 'Pass accuracy',
-                        data1: state.stats!.team1.passesAccuracy.toString(),
-                        data2: state.stats!.team2.passesAccuracy.toString(),
+                        data1: state.stats.team1.passesAccuracy.toString(),
+                        data2: state.stats.team2.passesAccuracy.toString(),
                       ),
                       _Stat(
                         title: 'Fouls',
-                        data1: state.stats!.team1.fouls.toString(),
-                        data2: state.stats!.team2.fouls.toString(),
+                        data1: state.stats.team1.fouls.toString(),
+                        data2: state.stats.team2.fouls.toString(),
                       ),
                       _Stat(
                         title: 'Yellow cards',
-                        data1: state.stats!.team1.yellowCards.toString(),
-                        data2: state.stats!.team2.yellowCards.toString(),
+                        data1: state.stats.team1.yellowCards.toString(),
+                        data2: state.stats.team2.yellowCards.toString(),
                       ),
                       _Stat(
                         title: 'Red cards',
-                        data1: state.stats!.team1.redCards.toString(),
-                        data2: state.stats!.team2.redCards.toString(),
+                        data1: state.stats.team1.redCards.toString(),
+                        data2: state.stats.team2.redCards.toString(),
                       ),
                       _Stat(
                         title: 'Offsides',
-                        data1: state.stats!.team1.offsides.toString(),
-                        data2: state.stats!.team2.offsides.toString(),
+                        data1: state.stats.team1.offsides.toString(),
+                        data2: state.stats.team2.offsides.toString(),
                       ),
                       _Stat(
                         title: 'Corners',
-                        data1: state.stats!.team1.corners.toString(),
-                        data2: state.stats!.team2.corners.toString(),
+                        data1: state.stats.team1.corners.toString(),
+                        data2: state.stats.team2.corners.toString(),
                       ),
                     ],
-                    if (currentTab == 'Goals') ...[],
+                    if (currentTab == 'Goals') ...[
+                      ...List.generate(
+                        state.goals.length,
+                        (index) {
+                          if (state.goals[index].type == 'Goal') {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                              child: Row(
+                                children: [
+                                  const SizedBox(width: 28),
+                                  const MySvg('assets/goal.svg'),
+                                  const SizedBox(width: 10),
+                                  Text(
+                                    state.goals[index].player,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontFamily: 'w700',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                          return Container();
+                        },
+                      )
+                    ],
                   ],
                 );
               }
@@ -340,13 +363,13 @@ class _Stat extends StatelessWidget {
   });
 
   final String title;
-  final String? data1;
-  final String? data2;
+  final String data1;
+  final String data2;
 
   @override
   Widget build(BuildContext context) {
-    double d1 = double.tryParse(data1?.replaceAll('%', '') ?? '') ?? 0;
-    double d2 = double.tryParse(data2?.replaceAll('%', '') ?? '') ?? 0;
+    double d1 = double.tryParse(data1.replaceAll('%', '')) ?? 0;
+    double d2 = double.tryParse(data2.replaceAll('%', '')) ?? 0;
     double total = (d1 + d2).clamp(1, double.infinity);
     double percentage1 = d1 / total;
     double percentage2 = d2 / total;
@@ -366,7 +389,7 @@ class _Stat extends StatelessWidget {
             children: [
               const SizedBox(width: 20),
               Text(
-                data1 ?? '',
+                data1,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,
@@ -385,7 +408,7 @@ class _Stat extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                data2 ?? '',
+                data2,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,

@@ -27,7 +27,7 @@ class Game {
 
   factory Game.fromJson(Map<String, dynamic> json) {
     return Game(
-      id: json['league']['id'],
+      id: json['fixture']['id'],
       league: json['league']['name'],
       title1: json['teams']['home']['name'],
       title2: json['teams']['away']['name'],
@@ -98,3 +98,50 @@ class Team {
     );
   }
 }
+
+class Goal {
+  Goal({
+    required this.player,
+    required this.type,
+    required this.time,
+  });
+
+  final String player;
+  final String type;
+  final int time;
+
+  factory Goal.fromJson(Map<String, dynamic> json) {
+    return Goal(
+      player: json['player']['name'] ?? '',
+      type: json['type'] ?? '',
+      time: json['time']['elapsed'] ?? '',
+    );
+  }
+}
+
+final statsDefault = Stats(
+  team1: Team(
+    shots: 0,
+    shotsOnGoal: 0,
+    possession: '',
+    passes: 0,
+    passesAccuracy: '',
+    fouls: 0,
+    yellowCards: 0,
+    redCards: 0,
+    offsides: 0,
+    corners: 0,
+  ),
+  team2: Team(
+    shots: 0,
+    shotsOnGoal: 0,
+    possession: '',
+    passes: 0,
+    passesAccuracy: '',
+    fouls: 0,
+    yellowCards: 0,
+    redCards: 0,
+    offsides: 0,
+    corners: 0,
+  ),
+);
