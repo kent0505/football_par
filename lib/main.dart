@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: Colors.black,
           dialogTheme: const DialogTheme(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(24)),
+              borderRadius: BorderRadius.all(Radius.circular(12)),
             ),
           ),
         ),

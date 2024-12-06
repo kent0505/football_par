@@ -6,24 +6,18 @@ class MyDialog extends StatelessWidget {
   const MyDialog({
     super.key,
     required this.title,
-    this.onlyClose = false,
-    required this.onPressed,
   });
 
   final String title;
-  final bool onlyClose;
-  final void Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
       backgroundColor: const Color(0xff1C1C1E),
-      child: SizedBox(
-        height: 150,
-        width: 200,
+      child: Container(
+        height: 200,
+        width: 240,
+        padding: const EdgeInsets.all(10),
         child: Column(
           children: [
             const SizedBox(height: 20),
@@ -32,79 +26,29 @@ class MyDialog extends StatelessWidget {
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 22,
-                fontFamily: 'w700',
+                fontFamily: 'w900',
               ),
             ),
             const Spacer(),
-            if (onlyClose)
-              MyButton(
-                padding: 0,
-                onPressed: () {
-                  onPressed;
-                  Navigator.pop(context);
-                },
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Close',
-                      style: TextStyle(
-                        color: Color(0xff4FB84F),
-                        fontSize: 16,
-                        fontFamily: 'w600',
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            else
-              Row(
+            MyButton(
+              padding: 0,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(width: 20),
-                  MyButton(
-                    padding: 0,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'NO',
-                          style: TextStyle(
-                            color: Color(0xff4FB84F),
-                            fontSize: 16,
-                            fontFamily: 'w600',
-                          ),
-                        ),
-                      ],
+                  Text(
+                    'OK',
+                    style: TextStyle(
+                      color: Color(0xffF8FF13),
+                      fontSize: 16,
+                      fontFamily: 'w700',
                     ),
                   ),
-                  const Spacer(),
-                  MyButton(
-                    padding: 0,
-                    onPressed: () {
-                      Navigator.pop(context);
-                      onPressed();
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'YES',
-                          style: TextStyle(
-                            color: Color(0xff4FB84F),
-                            fontSize: 16,
-                            fontFamily: 'w600',
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 20),
                 ],
               ),
-            const SizedBox(height: 10),
+            ),
           ],
         ),
       ),

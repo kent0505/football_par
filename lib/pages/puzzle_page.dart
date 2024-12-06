@@ -2,11 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:football_par/utils/utils.dart';
 
+import '../utils/utils.dart';
 import '../widgets/button.dart';
 import '../widgets/my_button.dart';
 import '../widgets/my_dialog.dart';
+import '../widgets/my_svg.dart';
 import '../widgets/page_title.dart';
 
 class PuzzlePage extends StatefulWidget {
@@ -17,29 +18,25 @@ class PuzzlePage extends StatefulWidget {
 }
 
 class _PuzzlePageState extends State<PuzzlePage> {
-  final List<int> _tiles = [...List.generate(15, (index) => index + 2), 0];
+  final tiles = [...List.generate(15, (index) => index + 2), 0];
+  final winningTiles = [0, ...List.generate(15, (index) => index + 2)];
   int emptyIndex = 0;
   int level = 1;
   bool isActive = false;
+  bool started = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _shuffle();
-  }
-
-  void _shuffle() {
+  void shuffle() {
     final rand = Random();
-    for (var i = _tiles.length - 1; i > 0; i--) {
+    for (var i = tiles.length - 1; i > 0; i--) {
       final j = rand.nextInt(i + 1);
-      final temp = _tiles[i];
-      _tiles[i] = _tiles[j];
-      _tiles[j] = temp;
+      final temp = tiles[i];
+      tiles[i] = tiles[j];
+      tiles[j] = temp;
     }
-    emptyIndex = _tiles.indexOf(0);
+    emptyIndex = tiles.indexOf(0);
   }
 
-  void _moveTile(int index) {
+  void moveTile(int index) {
     final emptyRow = emptyIndex ~/ 4;
     final emptyCol = emptyIndex % 4;
     final targetRow = index ~/ 4;
@@ -48,32 +45,29 @@ class _PuzzlePageState extends State<PuzzlePage> {
     if ((emptyRow == targetRow && (emptyCol - targetCol).abs() == 1) ||
         (emptyCol == targetCol && (emptyRow - targetRow).abs() == 1)) {
       setState(() {
-        _tiles[emptyIndex] = _tiles[index];
-        _tiles[index] = 0;
+        tiles[emptyIndex] = tiles[index];
+        tiles[index] = 0;
         emptyIndex = index;
-        _checkWinCondition();
+        checkWin();
       });
     }
   }
 
-  void _checkWinCondition() async {
-    final winningTiles = [0, ...List.generate(15, (index) => index + 2)];
-    logger(winningTiles);
-    logger(_tiles);
-    if (listEquals(_tiles, winningTiles)) {
+  void checkWin() async {
+    // logger(winningTiles);
+    // logger(tiles);
+    if (listEquals(tiles, winningTiles)) {
       if (level == 20) {
         await showDialog(
           context: context,
           barrierDismissible: false,
           builder: (context) {
-            return MyDialog(
-              title: 'You win!',
-              onlyClose: true,
-              onPressed: () {},
-            );
+            return const MyDialog(title: 'Well done!');
           },
         ).then((value) {
-          if (mounted) Navigator.pop(context);
+          setState(() {
+            started = false;
+          });
         });
       } else {
         setState(() {
@@ -81,84 +75,123 @@ class _PuzzlePageState extends State<PuzzlePage> {
         });
       }
     } else {
+      if (isActive) {
+        setState(() {
+          logger('SET STATE');
+          isActive = false;
+        });
+      }
+    }
+  }
+
+  void onNext() {
+    if (started) {
+      if (level == 20) {
+      } else {
+        setState(() {
+          level++;
+          shuffle();
+        });
+      }
+    } else {
       setState(() {
-        isActive = false;
+        started = true;
       });
     }
   }
 
   @override
+  void initState() {
+    super.initState();
+    shuffle();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final containerSize = MediaQuery.of(context).size.width - 40;
+    final containerSize = MediaQuery.of(context).size.width - 80;
     final tileSize = (containerSize - 14) / 4 + 4;
 
     return Column(
       children: [
-        const PageTitle('Puzzles'),
-        const Spacer(),
-        Center(
-          child: SizedBox(
+        PageTitle(started ? 'Level $level/20' : 'Puzzles'),
+        if (started) ...[
+          const Spacer(),
+          SizedBox(
             width: containerSize,
             height: containerSize,
             child: Stack(
               children: List.generate(16, (index) {
-                final tile = _tiles[index];
+                final tile = tiles[index];
                 final row = index ~/ 4;
                 final col = index % 4;
 
                 if (tile == 0) return const SizedBox.shrink();
 
-                return AnimatedPositioned(
+                return Positioned(
                   left: col * tileSize,
                   top: row * tileSize,
-                  duration: const Duration(milliseconds: 300),
                   child: MyButton(
-                    onPressed: () => _moveTile(index),
+                    onPressed: () => moveTile(index),
                     child: Container(
                       width: tileSize,
                       height: tileSize,
-                      padding: const EdgeInsets.all(5),
-                      child: tile > 0
-                          ? Stack(
-                              children: [
-                                Image.asset(
-                                  'assets/p$tile.png',
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Container();
-                                  },
-                                ),
-                                Center(
-                                  child: Text(
-                                    tile.toString(),
-                                    style: const TextStyle(
-                                      color: Colors.redAccent,
-                                      fontSize: 24,
-                                      fontFamily: 'w900',
+                      padding: const EdgeInsets.all(3),
+                      child: Container(
+                        color: const Color(0xffF8FF13),
+                        padding: const EdgeInsets.all(3),
+                        child: tile > 0
+                            ? Stack(
+                                children: [
+                                  Image.asset(
+                                    'assets/p$tile.png',
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Container();
+                                    },
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      tile.toString(),
+                                      style: const TextStyle(
+                                        color: Colors.redAccent,
+                                        fontSize: 24,
+                                        fontFamily: 'w900',
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            )
-                          : null,
+                                ],
+                              )
+                            : null,
+                      ),
                     ),
                   ),
                 );
               }),
             ),
           ),
-        ),
-        const Spacer(),
+          const Spacer(),
+        ] else ...[
+          const Spacer(),
+          const MySvg('assets/puzzle1.svg'),
+          const Spacer(),
+          const Text(
+            'Test your attentiveness in an exciting puzzles game.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 26,
+              fontFamily: 'w700',
+            ),
+          ),
+          const Spacer(),
+          const MySvg('assets/puzzle2.svg'),
+          const Spacer(),
+        ],
         Button(
-          title: 'Next',
-          isActive: isActive,
-          onPressed: () {
-            setState(() {
-              level++;
-              _shuffle();
-            });
-          },
+          title: started ? 'Next' : 'Start',
+          isActive: started ? isActive : true,
+          onPressed: onNext,
         ),
-        const SizedBox(height: 96),
+        const SizedBox(height: 60),
       ],
     );
   }
