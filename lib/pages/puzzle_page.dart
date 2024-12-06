@@ -191,7 +191,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
           isActive: started ? isActive : true,
           onPressed: onNext,
         ),
-        const SizedBox(height: 60),
+        const SizedBox(height: 130),
       ],
     );
   }

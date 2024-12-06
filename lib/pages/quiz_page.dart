@@ -117,7 +117,7 @@ class _QuizPageState extends State<QuizPage> {
           isActive: selected.title.isNotEmpty,
           onPressed: onNext,
         ),
-        const SizedBox(height: 60),
+        const SizedBox(height: 130),
       ],
     );
   }
