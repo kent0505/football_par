@@ -340,13 +340,13 @@ class _Stat extends StatelessWidget {
   });
 
   final String title;
-  final String data1;
-  final String data2;
+  final String? data1;
+  final String? data2;
 
   @override
   Widget build(BuildContext context) {
-    double d1 = double.tryParse(data1.replaceAll('%', '')) ?? 0;
-    double d2 = double.tryParse(data2.replaceAll('%', '')) ?? 0;
+    double d1 = double.tryParse(data1?.replaceAll('%', '') ?? '') ?? 0;
+    double d2 = double.tryParse(data2?.replaceAll('%', '') ?? '') ?? 0;
     double total = (d1 + d2).clamp(1, double.infinity);
     double percentage1 = d1 / total;
     double percentage2 = d2 / total;
@@ -366,7 +366,7 @@ class _Stat extends StatelessWidget {
             children: [
               const SizedBox(width: 20),
               Text(
-                data1,
+                data1 ?? '',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,
@@ -385,7 +385,7 @@ class _Stat extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                data2,
+                data2 ?? '',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,

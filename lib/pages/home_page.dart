@@ -5,7 +5,7 @@ import '../blocs/bottom/bottom_bloc.dart';
 import '../widgets/bottom.dart';
 import 'games_page.dart';
 import 'novost_page.dart';
-import 'puzzle_page.dart';
+import 'pazl_page.dart';
 import 'quiz_page.dart';
 import 'settings_page.dart';
 
@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
 
               if (state is BottomQuiz) return const QuizPage();
 
-              if (state is BottomPuzzle) return const PuzzlePage();
+              if (state is BottomPuzzle) return const PazlPage();
 
               if (state is BottomSettings) return const SettingsPage();
 

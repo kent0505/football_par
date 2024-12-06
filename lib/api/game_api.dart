@@ -5,7 +5,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/game.dart';
-import '../utils/utils.dart';
 
 class GameApi {
   final _dio = Dio();
@@ -31,11 +30,8 @@ class GameApi {
 
       List<Game> matches = data.map((json) => Game.fromJson(json)).toList();
 
-      logger(data);
-
       return matches;
     } on Object catch (error, stackTrace) {
-      logger(error);
       Error.throwWithStackTrace(error, stackTrace);
     }
   }
@@ -44,12 +40,9 @@ class GameApi {
     try {
       final jsonData = jsonDecode(json);
       List data = jsonData['response'];
-      List<Game> matches = data.map((json) {
-        return Game.fromJson(json);
-      }).toList();
+      List<Game> matches = data.map((json) => Game.fromJson(json)).toList();
       return matches;
     } on Object catch (error, stackTrace) {
-      logger(error);
       Error.throwWithStackTrace(error, stackTrace);
     }
   }
@@ -62,7 +55,6 @@ class GameApi {
       );
       return Stats.fromJson(response.data);
     } on Object catch (error, stackTrace) {
-      logger(error);
       Error.throwWithStackTrace(error, stackTrace);
     }
   }

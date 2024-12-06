@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../api/game_api.dart';
 import '../../models/game.dart';
-import '../../utils/utils.dart';
 
 part 'game_event.dart';
 part 'game_state.dart';
@@ -37,13 +36,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     Emitter<GameState> emit,
   ) async {
     emit(GamesLoading());
-
     final prefs = await SharedPreferences.getInstance();
     int lastLoadDay = prefs.getInt('lastLoadDay') ?? 0;
     String jsonData = prefs.getString('jsonData') ?? '';
-
     if (lastLoadDay == DateTime.now().day) {
-      logger('LOADING FROM JSON');
       try {
         List<Game> games = await _gameApi.getJson(jsonData);
         emit(GamesLoaded(games: games));
@@ -51,7 +47,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         emit(GamesError());
       }
     } else {
-      logger('LOADING FROM API');
       try {
         List<Game> games = await _gameApi.getGames();
         emit(GamesLoaded(games: games));
@@ -66,7 +61,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     Emitter<GameState> emit,
   ) async {
     emit(GamesLoading());
-
     try {
       Stats stats = await _gameApi.fetchStats(event.id);
       emit(GamesLoaded(games: event.games, stats: stats));

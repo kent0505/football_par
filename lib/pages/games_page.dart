@@ -165,6 +165,7 @@ class _Team extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             title,
+            textAlign: TextAlign.center,
             style: const TextStyle(
               color: Colors.black,
               fontSize: 12,
