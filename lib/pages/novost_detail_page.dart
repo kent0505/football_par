@@ -76,12 +76,9 @@ class NovostDetailPage extends StatelessWidget {
             top: 10 + statusbar(context),
             left: 10,
             child: MyButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              onPressed: () => Navigator.pop(context),
               child: const Icon(
                 Icons.arrow_back_ios_rounded,
-                // color: Color(0xffF8FF13),
                 color: Colors.white,
               ),
             ),

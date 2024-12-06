@@ -15,6 +15,8 @@ class LoadingPage extends StatelessWidget {
       body: BlocListener<GameBloc, GameState>(
         listener: (context, state) {
           if (state is DataLoaded) {
+            context.read<GameBloc>().add(GetGames());
+
             Future.delayed(
               const Duration(seconds: 2),
               () {
