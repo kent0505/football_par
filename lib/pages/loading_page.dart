@@ -37,7 +37,7 @@ class LoadingPage extends StatelessWidget {
         },
         child: const Center(
           child: CupertinoActivityIndicator(
-            color: Colors.white,
+            color: Color(0xffF8FF13),
             radius: 14,
           ),
         ),

@@ -22,9 +22,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     Emitter<GameState> emit,
   ) async {
     final prefs = await SharedPreferences.getInstance();
-    // await prefs.remove('onboard');
     // await prefs.clear();
-    bool onboard = prefs.getBool('onboard') ?? false;
+    bool onboard = prefs.getBool('onboard') ?? true;
     logger(onboard);
     emit(DataLoaded(onboard: onboard));
   }
