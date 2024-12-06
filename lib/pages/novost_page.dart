@@ -70,7 +70,7 @@ class _NovostCard extends StatelessWidget {
                       width: 122,
                       height: 112,
                       decoration: BoxDecoration(
-                        color: Colors.blueAccent,
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: ClipRRect(
@@ -94,7 +94,10 @@ class _NovostCard extends StatelessWidget {
             Expanded(
               child: Container(
                 height: 112,
-                padding: const EdgeInsets.all(18),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xffF8FF13),
                   borderRadius: BorderRadius.circular(30),
