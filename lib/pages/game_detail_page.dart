@@ -242,7 +242,7 @@ class _GameDetailPageState extends State<GameDetailPage> {
             },
           ),
           Positioned(
-            top: 10 + statusbar(context),
+            top: statusbar(context),
             left: 10,
             child: MyButton(
               onPressed: () => Navigator.pop(context),
@@ -373,21 +373,19 @@ class _Stat extends StatelessWidget {
     double total = (d1 + d2).clamp(1, double.infinity);
     double percentage1 = d1 / total;
     double percentage2 = d2 / total;
-    double maxWidth = 160;
+    double maxWidth = 140;
     double calculatedWidth1 = (percentage1 * maxWidth).clamp(0, maxWidth);
     double calculatedWidth2 = (percentage2 * maxWidth).clamp(0, maxWidth);
 
     return Padding(
       padding: const EdgeInsets.only(
-        left: 36,
-        right: 36,
         bottom: 12,
       ),
       child: Column(
         children: [
           Row(
             children: [
-              const SizedBox(width: 20),
+              const Spacer(),
               Text(
                 data1,
                 style: const TextStyle(
@@ -396,17 +394,20 @@ class _Stat extends StatelessWidget {
                   fontFamily: 'w700',
                 ),
               ),
-              const Spacer(),
-              Text(
-                title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontFamily: 'w800',
-                  fontStyle: FontStyle.italic,
+              Expanded(
+                flex: 5,
+                child: Center(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontFamily: 'w800',
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
                 ),
               ),
-              const Spacer(),
               Text(
                 data2,
                 style: const TextStyle(
@@ -415,7 +416,7 @@ class _Stat extends StatelessWidget {
                   fontFamily: 'w700',
                 ),
               ),
-              const SizedBox(width: 20),
+              const Spacer(),
             ],
           ),
           const SizedBox(height: 8),
@@ -424,12 +425,12 @@ class _Stat extends StatelessWidget {
             children: [
               SizedBox(
                 height: 7,
-                width: 160,
+                width: 140,
                 child: Stack(
                   children: [
                     Container(
                       height: 7,
-                      width: 160,
+                      width: 140,
                       decoration: BoxDecoration(
                         color: const Color(0xff525252),
                         borderRadius: BorderRadius.circular(7),
@@ -449,12 +450,12 @@ class _Stat extends StatelessWidget {
               const SizedBox(width: 12),
               SizedBox(
                 height: 7,
-                width: 160,
+                width: 140,
                 child: Stack(
                   children: [
                     Container(
                       height: 7,
-                      width: 160,
+                      width: 140,
                       decoration: BoxDecoration(
                         color: const Color(0xff525252),
                         borderRadius: BorderRadius.circular(7),

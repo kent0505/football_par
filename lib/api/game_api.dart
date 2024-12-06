@@ -12,7 +12,8 @@ class GameApi {
     validateStatus: (status) => true,
     headers: {
       'x-rapidapi-host': 'v3.football.api-sports.io',
-      'x-rapidapi-key': 'aad567230b15af533a80bf5aa13a14cb',
+      // 'x-rapidapi-key': 'aad567230b15af533a80bf5aa13a14cb',
+      'x-rapidapi-key': 'e0fbe3beaaed6d5b1321d8a9cbeaf93a'
     },
   );
 
@@ -56,8 +57,10 @@ class GameApi {
         'https://v3.football.api-sports.io/fixtures/statistics?fixture=$id',
         options: options,
       );
+      print(response.data);
       return Stats.fromJson(response.data);
     } on Object catch (error, stackTrace) {
+      print(error);
       Error.throwWithStackTrace(error, stackTrace);
     }
   }
@@ -69,9 +72,11 @@ class GameApi {
         options: options,
       );
       List data = response.data['response'];
+      print(data);
       List<Goal> goals = data.map((json) => Goal.fromJson(json)).toList();
       return goals;
     } on Object catch (error, stackTrace) {
+      print(error);
       Error.throwWithStackTrace(error, stackTrace);
     }
   }
