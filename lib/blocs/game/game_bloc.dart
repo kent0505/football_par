@@ -27,7 +27,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     Emitter<GameState> emit,
   ) async {
     final prefs = await SharedPreferences.getInstance();
-    // await prefs.clear();
     bool onboard = prefs.getBool('onboard') ?? true;
     emit(DataLoaded(onboard: onboard));
   }
@@ -42,13 +41,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     String jsonData = prefs.getString('jsonData') ?? '';
 
     if (lastLoadDay == DateTime.now().day && jsonData.isNotEmpty) {
-      log('LOADING FROM JSON');
+      log('FROM JSON');
       try {
         List<Game> games = await _gameApi.getJson(jsonData);
         emit(GamesLoaded(games: games));
       } on Object catch (_) {}
     } else {
-      log('LOADING FROM API');
+      log('FROM API');
       try {
         List<Game> games = await _gameApi.getGames();
         emit(GamesLoaded(games: games));
