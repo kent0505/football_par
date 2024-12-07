@@ -35,10 +35,6 @@ class _GameDetailPageState extends State<GameDetailPage> {
     });
   }
 
-  int getGrid(String grid) {
-    return int.parse(grid.split(':')[0]);
-  }
-
   @override
   void initState() {
     super.initState();
@@ -317,6 +313,14 @@ class _Players extends StatelessWidget {
   final List<Player> players;
   final bool isWhite;
 
+  int getGrid(String grid) {
+    try {
+      return int.parse(grid.split(':')[0]);
+    } catch (e) {
+      return 0;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -325,7 +329,7 @@ class _Players extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           for (Player player in players) ...[
-            if (int.parse(player.grid.split(':')[0]) == row) ...[
+            if (getGrid(player.grid) == row) ...[
               _PlayerCard(player: player, isWhite: isWhite),
             ],
           ],
