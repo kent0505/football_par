@@ -51,7 +51,9 @@ class _GameDetailPageState extends State<GameDetailPage> {
             builder: (context, state) {
               if (state is DetailsLoading) {
                 return const Center(
-                  child: CupertinoActivityIndicator(),
+                  child: CupertinoActivityIndicator(
+                    color: Colors.white,
+                  ),
                 );
               }
               if (state is DetailsLoaded) {
@@ -166,7 +168,7 @@ class _GameDetailPageState extends State<GameDetailPage> {
                                   _Players(row: 3, players: state.lineup.team1),
                                   _Players(row: 4, players: state.lineup.team1),
                                   _Players(row: 5, players: state.lineup.team1),
-                                  const SizedBox(height: 10),
+                                  const Spacer(),
                                   _Players(
                                       row: 5,
                                       players: state.lineup.team2,
@@ -187,6 +189,7 @@ class _GameDetailPageState extends State<GameDetailPage> {
                                       row: 1,
                                       players: state.lineup.team2,
                                       isWhite: true),
+                                  const SizedBox(height: 10),
                                 ],
                               ),
                             ],
