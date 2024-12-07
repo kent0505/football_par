@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'blocs/bloc/detail_bloc.dart';
 import 'blocs/bottom/bottom_bloc.dart';
 import 'blocs/game/game_bloc.dart';
 import 'pages/loading_page.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => BottomBloc()),
         BlocProvider(create: (context) => GameBloc()..add(LoadData())),
+        BlocProvider(create: (context) => DetailBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

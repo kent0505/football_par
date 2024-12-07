@@ -8,15 +8,9 @@ final class GameInitial extends GameState {}
 final class GamesLoading extends GameState {}
 
 final class GamesLoaded extends GameState {
-  GamesLoaded({
-    required this.games,
-    required this.stats,
-    required this.goals,
-  });
+  GamesLoaded({required this.games});
 
   final List<Game> games;
-  final Stats stats;
-  final List<Goal> goals;
 }
 
 final class DataLoaded extends GameState {

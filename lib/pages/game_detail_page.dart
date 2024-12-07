@@ -1,9 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-import '../blocs/game/game_bloc.dart';
+import '../blocs/bloc/detail_bloc.dart';
 import '../models/game.dart';
 import '../utils/utils.dart';
 import '../widgets/my_button.dart';
@@ -33,13 +35,15 @@ class _GameDetailPageState extends State<GameDetailPage> {
     });
   }
 
+  int getGrid(String grid) {
+    return int.parse(grid.split(':')[0]);
+  }
+
   @override
   void initState() {
     super.initState();
-    context.read<GameBloc>().add(GetStats(
-          id: widget.game.id,
-          games: widget.games,
-        ));
+    log(widget.game.id.toString());
+    context.read<DetailBloc>().add(GetDetails(fixture: widget.game.id));
   }
 
   @override
@@ -47,15 +51,14 @@ class _GameDetailPageState extends State<GameDetailPage> {
     return Scaffold(
       body: Stack(
         children: [
-          BlocBuilder<GameBloc, GameState>(
+          BlocBuilder<DetailBloc, DetailState>(
             builder: (context, state) {
-              if (state is GamesLoading) {
+              if (state is DetailsLoading) {
                 return const Center(
                   child: CupertinoActivityIndicator(),
                 );
               }
-
-              if (state is GamesLoaded) {
+              if (state is DetailsLoaded) {
                 return ListView(
                   padding: EdgeInsets.zero,
                   children: [
@@ -152,7 +155,48 @@ class _GameDetailPageState extends State<GameDetailPage> {
                     const SizedBox(height: 22),
                     if (currentTab == 'Lineups') ...[
                       const SizedBox(height: 16),
-                      const MySvg('assets/lineup.svg'),
+                      Center(
+                        child: SizedBox(
+                          height: 440,
+                          width: 280,
+                          child: Stack(
+                            children: [
+                              const MySvg('assets/lineup.svg'),
+                              Column(
+                                children: [
+                                  const SizedBox(height: 20),
+                                  _Players(row: 1, players: state.lineup.team1),
+                                  _Players(row: 2, players: state.lineup.team1),
+                                  _Players(row: 3, players: state.lineup.team1),
+                                  _Players(row: 4, players: state.lineup.team1),
+                                  _Players(row: 5, players: state.lineup.team1),
+                                  const SizedBox(height: 10),
+                                  _Players(
+                                      row: 5,
+                                      players: state.lineup.team2,
+                                      isWhite: true),
+                                  _Players(
+                                      row: 4,
+                                      players: state.lineup.team2,
+                                      isWhite: true),
+                                  _Players(
+                                      row: 3,
+                                      players: state.lineup.team2,
+                                      isWhite: true),
+                                  _Players(
+                                      row: 2,
+                                      players: state.lineup.team2,
+                                      isWhite: true),
+                                  _Players(
+                                      row: 1,
+                                      players: state.lineup.team2,
+                                      isWhite: true),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                     if (currentTab == 'Stats') ...[
                       _Stat(
@@ -246,17 +290,78 @@ class _GameDetailPageState extends State<GameDetailPage> {
             left: 10,
             child: MyButton(
               onPressed: () => Navigator.pop(context),
-              child: BlocBuilder<GameBloc, GameState>(
+              child: BlocBuilder<DetailBloc, DetailState>(
                 builder: (context, state) {
                   return Icon(
                     Icons.arrow_back_ios_rounded,
-                    color: state is GamesLoaded ? Colors.black : Colors.white,
+                    color: state is DetailsLoaded ? Colors.black : Colors.white,
                   );
                 },
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _Players extends StatelessWidget {
+  const _Players({
+    required this.row,
+    required this.players,
+    this.isWhite = false,
+  });
+
+  final int row;
+  final List<Player> players;
+  final bool isWhite;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          for (Player player in players) ...[
+            if (int.parse(player.grid.split(':')[0]) == row) ...[
+              _PlayerCard(player: player, isWhite: isWhite),
+            ],
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _PlayerCard extends StatelessWidget {
+  const _PlayerCard({
+    required this.player,
+    this.isWhite = false,
+  });
+
+  final Player player;
+  final bool isWhite;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 30,
+      width: 30,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: isWhite ? Colors.white : const Color(0xffF8FF13),
+      ),
+      child: Center(
+        child: Text(
+          player.number,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 14,
+            fontFamily: 'w500',
+          ),
+        ),
       ),
     );
   }

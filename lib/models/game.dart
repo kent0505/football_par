@@ -60,41 +60,41 @@ class Stats {
 
 class Team {
   Team({
-    required this.shots,
-    required this.shotsOnGoal,
-    required this.possession,
-    required this.passes,
-    required this.passesAccuracy,
-    required this.fouls,
-    required this.yellowCards,
-    required this.redCards,
-    required this.offsides,
-    required this.corners,
+    this.shots = '',
+    this.shotsOnGoal = '',
+    this.possession = '',
+    this.passes = '',
+    this.passesAccuracy = '',
+    this.fouls = '',
+    this.yellowCards = '',
+    this.redCards = '',
+    this.offsides = '',
+    this.corners = '',
   });
 
-  final int shots;
-  final int shotsOnGoal;
+  final String shots;
+  final String shotsOnGoal;
   final String possession;
-  final int passes;
+  final String passes;
   final String passesAccuracy;
-  final int fouls;
-  final int yellowCards;
-  final int redCards;
-  final int offsides;
-  final int corners;
+  final String fouls;
+  final String yellowCards;
+  final String redCards;
+  final String offsides;
+  final String corners;
 
   factory Team.fromJson(List<dynamic> statistics) {
     return Team(
-      shots: statistics[2]['value'] ?? 0,
-      shotsOnGoal: statistics[0]['value'] ?? 0,
-      possession: statistics[9]['value'] ?? '0%',
-      passes: statistics[13]['value'] ?? 0,
-      passesAccuracy: statistics[15]['value'] ?? '0%',
-      fouls: statistics[6]['value'] ?? 0,
-      yellowCards: statistics[10]['value'] ?? 0,
-      redCards: statistics[11]['value'] ?? 0,
-      offsides: statistics[8]['value'] ?? 0,
-      corners: statistics[7]['value'] ?? 0,
+      shots: statistics[2]['value'].toString(),
+      shotsOnGoal: statistics[0]['value'].toString(),
+      possession: statistics[9]['value'].toString(),
+      passes: statistics[13]['value'].toString(),
+      passesAccuracy: statistics[15]['value'].toString(),
+      fouls: statistics[6]['value'].toString(),
+      yellowCards: statistics[10]['value'].toString(),
+      redCards: statistics[11]['value'].toString(),
+      offsides: statistics[8]['value'].toString(),
+      corners: statistics[7]['value'].toString(),
     );
   }
 }
@@ -112,36 +112,41 @@ class Goal {
 
   factory Goal.fromJson(Map<String, dynamic> json) {
     return Goal(
-      player: json['player']['name'] ?? '',
-      type: json['type'] ?? '',
-      time: json['time']['elapsed'] ?? '',
+      player: json['player']['name'],
+      type: json['type'],
+      time: json['time']['elapsed'],
+    );
+  }
+}
+
+class Lineup {
+  Lineup({required this.team1, required this.team2});
+
+  final List<Player> team1;
+  final List<Player> team2;
+}
+
+class Player {
+  Player({
+    required this.name,
+    required this.number,
+    required this.grid,
+  });
+
+  final String name;
+  final String number;
+  final String grid;
+
+  factory Player.fromJson(Map<String, dynamic> json) {
+    return Player(
+      name: json['player']['name'].toString(),
+      number: json['player']['number'].toString(),
+      grid: json['player']['grid'].toString(),
     );
   }
 }
 
 final statsDefault = Stats(
-  team1: Team(
-    shots: 0,
-    shotsOnGoal: 0,
-    possession: '',
-    passes: 0,
-    passesAccuracy: '',
-    fouls: 0,
-    yellowCards: 0,
-    redCards: 0,
-    offsides: 0,
-    corners: 0,
-  ),
-  team2: Team(
-    shots: 0,
-    shotsOnGoal: 0,
-    possession: '',
-    passes: 0,
-    passesAccuracy: '',
-    fouls: 0,
-    yellowCards: 0,
-    redCards: 0,
-    offsides: 0,
-    corners: 0,
-  ),
+  team1: Team(),
+  team2: Team(),
 );

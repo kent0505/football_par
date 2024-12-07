@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,7 +18,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       (event, emit) => switch (event) {
         LoadData() => _loadData(event, emit),
         GetGames() => _getGames(event, emit),
-        GetStats() => _getStats(event, emit),
       },
     );
   }
@@ -41,38 +42,17 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     String jsonData = prefs.getString('jsonData') ?? '';
 
     if (lastLoadDay == DateTime.now().day && jsonData.isNotEmpty) {
+      log('LOADING FROM JSON');
       try {
         List<Game> games = await _gameApi.getJson(jsonData);
-        emit(GamesLoaded(
-          games: games,
-          goals: const [],
-          stats: statsDefault,
-        ));
+        emit(GamesLoaded(games: games));
       } on Object catch (_) {}
     } else {
+      log('LOADING FROM API');
       try {
         List<Game> games = await _gameApi.getGames();
-        emit(GamesLoaded(
-          games: games,
-          goals: const [],
-          stats: statsDefault,
-        ));
+        emit(GamesLoaded(games: games));
       } on Object catch (_) {}
     }
-  }
-
-  void _getStats(
-    GetStats event,
-    Emitter<GameState> emit,
-  ) async {
-    try {
-      Stats stats = await _gameApi.fetchStats(event.id);
-      List<Goal> goals = await _gameApi.fetchGoals(event.id);
-      emit(GamesLoaded(
-        games: event.games,
-        stats: stats,
-        goals: goals,
-      ));
-    } on Object catch (_) {}
   }
 }
