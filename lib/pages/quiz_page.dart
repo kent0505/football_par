@@ -75,7 +75,7 @@ class _QuizPageState extends State<QuizPage> {
           ),
         ),
         Expanded(
-          flex: 2,
+          flex: 4,
           child: Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -117,7 +117,7 @@ class _QuizPageState extends State<QuizPage> {
           isActive: selected.title.isNotEmpty,
           onPressed: onNext,
         ),
-        const SizedBox(height: 130),
+        const SizedBox(height: 100),
       ],
     );
   }
