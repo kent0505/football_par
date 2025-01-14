@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -6,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../blocs/game/game_bloc.dart';
 import '../models/game.dart';
 import '../utils/utils.dart';
+import '../widgets/loading.dart';
 import '../widgets/my_button.dart';
 import '../widgets/page_title.dart';
 import 'game_detail_page.dart';
@@ -17,9 +17,7 @@ class GamesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<GameBloc, GameState>(
       builder: (context, state) {
-        if (state is GamesLoading) {
-          return const CupertinoActivityIndicator();
-        }
+        if (state is GamesLoading) const Loading();
 
         if (state is GamesLoaded) {
           return ListView(
@@ -105,7 +103,7 @@ class _Game extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    formatTimestamp(game.date),
+                    formatDate(),
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: Colors.black,
@@ -114,7 +112,7 @@ class _Game extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '${game.goals1}-${game.goals2}',
+                    game.score,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: Colors.black,
@@ -161,6 +159,9 @@ class _Team extends StatelessWidget {
             imageUrl: logo,
             height: 55,
             width: 55,
+            errorWidget: (context, url, error) {
+              return Container();
+            },
           ),
           const SizedBox(height: 6),
           Text(

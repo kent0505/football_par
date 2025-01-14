@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,22 +34,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     Emitter<GameState> emit,
   ) async {
     emit(GamesLoading());
-    final prefs = await SharedPreferences.getInstance();
-    int lastLoadDay = prefs.getInt('lastLoadDay') ?? 0;
-    String jsonData = prefs.getString('jsonData') ?? '';
-
-    if (lastLoadDay == DateTime.now().day && jsonData.isNotEmpty) {
-      log('FROM JSON');
-      try {
-        List<Game> games = await _gameApi.getJson(jsonData);
-        emit(GamesLoaded(games: games));
-      } on Object catch (_) {}
-    } else {
-      log('FROM API');
-      try {
-        List<Game> games = await _gameApi.getGames();
-        emit(GamesLoaded(games: games));
-      } on Object catch (_) {}
+    try {
+      List<Game> games = await _gameApi.getGames();
+      emit(GamesLoaded(games: games));
+    } on Object catch (_) {
+      emit(GamesLoaded(games: const []));
     }
   }
 }

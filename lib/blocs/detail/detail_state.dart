@@ -15,6 +15,6 @@ final class DetailsLoaded extends DetailState {
   });
 
   final Lineup lineup;
-  final Stats stats;
+  final List<Stats> stats;
   final List<Goal> goals;
 }

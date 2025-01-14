@@ -21,13 +21,22 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
     try {
       emit(DetailsLoading());
       Lineup lineup = await _gameApi.fetchLineups(event.fixture);
-      Stats stats = await _gameApi.fetchStats(event.fixture);
+      List<Stats> stats = await _gameApi.fetchStats(event.fixture);
       List<Goal> goals = await _gameApi.fetchGoals(event.fixture);
       emit(DetailsLoaded(
         stats: stats,
         lineup: lineup,
         goals: goals,
       ));
-    } on Object catch (_) {}
+    } on Object catch (_) {
+      emit(DetailsLoaded(
+        stats: const [],
+        lineup: Lineup(
+          players1: [],
+          players2: [],
+        ),
+        goals: const [],
+      ));
+    }
   }
 }

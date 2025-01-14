@@ -1,100 +1,51 @@
-import '../utils/utils.dart';
-
 class Game {
   const Game({
     required this.id,
-    required this.league,
+    required this.score,
+    required this.stadium,
     required this.title1,
     required this.title2,
     required this.logo1,
     required this.logo2,
-    required this.goals1,
-    required this.goals2,
-    required this.stadium,
-    required this.date,
   });
 
   final int id;
-  final String league;
+  final String score;
+  final String stadium;
   final String title1;
   final String title2;
   final String logo1;
   final String logo2;
-  final int goals1;
-  final int goals2;
-  final String stadium;
-  final int date;
 
   factory Game.fromJson(Map<String, dynamic> json) {
     return Game(
-      id: json['fixture']['id'],
-      league: json['league']['name'],
-      title1: json['teams']['home']['name'],
-      title2: json['teams']['away']['name'],
-      logo1: json['teams']['home']['logo'],
-      logo2: json['teams']['away']['logo'],
-      goals1: json['goals']['home'] ?? 0,
-      goals2: json['goals']['away'] ?? 0,
-      stadium: json['fixture']['venue']['name'] ?? 'null',
-      date: json['fixture']['timestamp'] ?? getTimestamp(),
+      id: json['id'],
+      score: json['score'],
+      stadium: json['stadium'],
+      title1: json['home']['title'],
+      title2: json['away']['title'],
+      logo1: json['home']['logo'],
+      logo2: json['away']['logo'],
     );
   }
 }
 
 class Stats {
   Stats({
+    required this.title,
     required this.team1,
     required this.team2,
   });
 
-  final Team team1;
-  final Team team2;
+  final String title;
+  final String team1;
+  final String team2;
 
   factory Stats.fromJson(Map<String, dynamic> json) {
     return Stats(
-      team1: Team.fromJson(json['response'][0]['statistics']),
-      team2: Team.fromJson(json['response'][1]['statistics']),
-    );
-  }
-}
-
-class Team {
-  Team({
-    this.shots = '',
-    this.shotsOnGoal = '',
-    this.possession = '',
-    this.passes = '',
-    this.passesAccuracy = '',
-    this.fouls = '',
-    this.yellowCards = '',
-    this.redCards = '',
-    this.offsides = '',
-    this.corners = '',
-  });
-
-  final String shots;
-  final String shotsOnGoal;
-  final String possession;
-  final String passes;
-  final String passesAccuracy;
-  final String fouls;
-  final String yellowCards;
-  final String redCards;
-  final String offsides;
-  final String corners;
-
-  factory Team.fromJson(List<dynamic> statistics) {
-    return Team(
-      shots: statistics[2]['value'].toString(),
-      shotsOnGoal: statistics[0]['value'].toString(),
-      possession: statistics[9]['value'].toString(),
-      passes: statistics[13]['value'].toString(),
-      passesAccuracy: statistics[15]['value'].toString(),
-      fouls: statistics[6]['value'].toString(),
-      yellowCards: statistics[10]['value'].toString(),
-      redCards: statistics[11]['value'].toString(),
-      offsides: statistics[8]['value'].toString(),
-      corners: statistics[7]['value'].toString(),
+      title: json['title'],
+      team1: json['team1'],
+      team2: json['team2'],
     );
   }
 }
@@ -102,51 +53,65 @@ class Team {
 class Goal {
   Goal({
     required this.player,
-    required this.type,
     required this.time,
   });
 
   final String player;
-  final String type;
-  final int time;
+  final String time;
 
   factory Goal.fromJson(Map<String, dynamic> json) {
     return Goal(
-      player: json['player']['name'],
-      type: json['type'],
-      time: json['time']['elapsed'],
+      player: json['player'],
+      time: json['time'],
     );
   }
 }
 
 class Lineup {
-  Lineup({required this.team1, required this.team2});
+  Lineup({
+    required this.players1,
+    required this.players2,
+  });
 
-  final List<Player> team1;
-  final List<Player> team2;
+  final List<Player> players1;
+  final List<Player> players2;
+
+  factory Lineup.fromJson(Map<String, dynamic> json) {
+    final lineup1 = json['lineups'][0];
+    final lineup2 = json['lineups'][1];
+
+    return Lineup(
+      players1: (lineup1['players'] as List)
+          .map((playerJson) => Player.fromJson(playerJson))
+          .toList(),
+      players2: (lineup2['players'] as List)
+          .map((playerJson) => Player.fromJson(playerJson))
+          .toList(),
+    );
+  }
+
+  // factory Lineup.fromJson(Map<String, dynamic> json) {
+  //   return Lineup(
+  //     formation1: json['lineups'][0]['formation'],
+  //     formation2: json['lineups'][1]['formation'],
+  //     players1: json['lineups'][0]['players'],
+  //     players2: json['lineups'][1]['players'],
+  //   );
+  // }
 }
 
 class Player {
-  Player({
-    required this.name,
-    required this.number,
-    required this.grid,
-  });
-
   final String name;
   final String number;
-  final String grid;
+  final String position;
+
+  Player({required this.name, required this.number, required this.position});
 
   factory Player.fromJson(Map<String, dynamic> json) {
     return Player(
-      name: json['player']['name'].toString(),
-      number: json['player']['number'].toString(),
-      grid: json['player']['grid'].toString(),
+      name: json['name'],
+      number: json['number'],
+      position: json['position'],
     );
   }
 }
-
-final statsDefault = Stats(
-  team1: Team(),
-  team2: Team(),
-);

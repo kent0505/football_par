@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/game/game_bloc.dart';
+import '../widgets/loading.dart';
 import 'home_page.dart';
 import 'onboard_page.dart';
 
@@ -37,12 +37,13 @@ class LoadingPage extends StatelessWidget {
             );
           }
         },
-        child: const Center(
-          child: CupertinoActivityIndicator(
-            color: Color(0xffF8FF13),
-            radius: 14,
-          ),
-        ),
+        child: const Loading(),
+        // child: const Center(
+        //   child: CupertinoActivityIndicator(
+        //     color: Color(0xffF8FF13),
+        //     radius: 14,
+        //   ),
+        // ),
       ),
     );
   }
